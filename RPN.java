@@ -1,33 +1,33 @@
-import java.util.Arrays;
-import java.util.Scanner;
 import java.util.Stack;
 
 
-public class RPN {
-    public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
-        String mathExpression = input.nextLine();
-        String[] allNumbers = mathExpression.split("\\+|\\-|\\*|\\/");
-        System.out.println(Arrays.toString(allNumbers));
+public class RPN extends CalculatorRPN {
+    private static int COUNTER_NUMBERS = 0;
+
+    public static void main() {
+        String[] allNumbersTemp = mathExpression.split("\\+|\\-|\\*|\\/|\\(|\\)|\\%");
+        countNumbers(allNumbersTemp);
+        String[] allNumbers = new String[COUNTER_NUMBERS];
+        COUNTER_NUMBERS = 0;
+        fillWithNumbers(allNumbersTemp, allNumbers);
         String rpnExpression = getRPN(mathExpression);
-        System.out.println(rpnExpression);
         double result = getFinalResult(rpnExpression, allNumbers);
         if (result == Math.floor(result)) {
-            System.out.println((int) result);
+            expressionField.setText("Result: " + (int) result);
         } else {
-            System.out.println(result);
+            expressionField.setText("Result: " + result);
         }
     }
 
-    private static String getRPN(String expression) {
+    public static String getRPN(String expression) {
         String rpn = "";
         Stack<Character> symbols = new Stack<>();
         for (int i = 0; i < expression.length(); i++) {
-            if (expression.charAt(i) != '+' && expression.charAt(i) != '-' && expression.charAt(i) != '*' && expression.charAt(i) != '/' && expression.charAt(i) != ' ') {
+            if (expression.charAt(i) != '+' && expression.charAt(i) != '-' && expression.charAt(i) != '*' && expression.charAt(i) != '/' && expression.charAt(i) != ' ' && expression.charAt(i) != '(' && expression.charAt(i) != ')') {
                 rpn += expression.charAt(i);
-            } else if (expression.charAt(i) == '+' || expression.charAt(i) == '-' || expression.charAt(i) == '*' || expression.charAt(i) == '/') {
+            } else if (expression.charAt(i) == '+' || expression.charAt(i) == '-' || expression.charAt(i) == '*' || expression.charAt(i) == '/' || expression.charAt(i) == '(' || expression.charAt(i) == ')') {
                 if (expression.charAt(i) == '+' || expression.charAt(i) == '-') {
-                    if (symbols.empty() || symbols.peek() != '*' && symbols.peek() != '/') {
+                    if (symbols.empty() || symbols.peek() != '*' && symbols.peek() != '/' && symbols.peek() != '+' && symbols.peek() != '-') {
                         symbols.push(expression.charAt(i));
                     } else if (!symbols.empty()) {
                         while (!symbols.empty()) {
@@ -35,6 +35,12 @@ public class RPN {
                         }
                         symbols.push(expression.charAt(i));
                     }
+                } else if (expression.charAt(i) == ')') {
+                    while (symbols.peek() != '(') {
+                        rpn += symbols.pop();
+                    }
+                    symbols.pop();
+                    continue;
                 } else {
                     symbols.push(expression.charAt(i));
                 }
@@ -51,7 +57,7 @@ public class RPN {
         double tempResult, a, b;
         byte counter = 0;
         for (int i = 0; i < expression.length(); i++) {
-            if (expression.charAt(i) != '+' && expression.charAt(i) != '-' && expression.charAt(i) != '*' && expression.charAt(i) != '/') {
+            if (expression.charAt(i) != '+' && expression.charAt(i) != '-' && expression.charAt(i) != '*' && expression.charAt(i) != '/' && expression.charAt(i) != '%') {
                 numbersRPN.push(Double.parseDouble(numbers[counter].trim()));
                 if ((numbers[counter].trim()).length() > 1) {
                     i += numbers[counter].length() - 1;
@@ -83,9 +89,32 @@ public class RPN {
                         tempResult = b / a;
                         numbersRPN.push(tempResult);
                         break;
+                    case '%':
+                        a = numbersRPN.pop();
+                        tempResult = a / 100;
+                        numbersRPN.push(tempResult);
+                        break;
                 }
             }
         }
         return numbersRPN.pop();
+    }
+
+    private static String[] fillWithNumbers(String[] allNumbersTemp, String[] allNumbers) {
+        for (int i = 0; i < allNumbersTemp.length; i++) {
+            if (!allNumbersTemp[i].equals("")) {
+                allNumbers[COUNTER_NUMBERS++] = allNumbersTemp[i];
+            }
+        }
+        return allNumbers;
+    }
+
+    private static int countNumbers(String[] allNumbersTemp) {
+        for (String i : allNumbersTemp) {
+            if (!i.equals("")) {
+                COUNTER_NUMBERS++;
+            }
+        }
+        return COUNTER_NUMBERS;
     }
 }
