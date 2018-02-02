@@ -12,7 +12,7 @@ import javax.swing.*;
 
 public class CalculatorRPN extends Application {
 
-    Button button, button1, button2, button3, button4, button5, button6, button7, button8, button9, buttonPlus, buttonMinus, buttonMult, buttonDiv, buttonOpen, buttonClose, buttonPercentage;
+    Button button, button1, button2, button3, button4, button5, button6, button7, button8, button9, buttonPlus, buttonMinus, buttonMult, buttonDiv, buttonOpen, buttonClose, buttonPercentage, buttonZero, buttonDot;
     static TextField expressionField;
     public static String mathExpression;
 
@@ -24,7 +24,7 @@ public class CalculatorRPN extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("SilverlinedCalculator");
         expressionField = new TextField();
-        expressionField.setMinWidth(170);
+        expressionField.setMinWidth(160);
         buttonsInit();
 
         HBox topText = new HBox();
@@ -37,7 +37,7 @@ public class CalculatorRPN extends Application {
         leftButtons.getChildren().addAll(buttonPlus, buttonMinus, buttonMult, buttonDiv);
 
         FlowPane centerButtons = new FlowPane();
-        centerButtons.getChildren().addAll(button1, button2, button3, button4, button5, button6, button7, button8, button9);
+        centerButtons.getChildren().addAll(button1, button2, button3, button4, button5, button6, button7, button8, button9, buttonZero, buttonDot);
 
         BorderPane coreLayout = new BorderPane();
         coreLayout.setTop(topText);
@@ -45,7 +45,7 @@ public class CalculatorRPN extends Application {
         coreLayout.setCenter(centerButtons);
         coreLayout.setLeft(leftButtons);
 
-        Scene scene = new Scene(coreLayout, 180, 210);
+        Scene scene = new Scene(coreLayout, 170, 220);
 
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -62,6 +62,7 @@ public class CalculatorRPN extends Application {
         button7 = new Button("7");
         button8 = new Button("8");
         button9 = new Button("9");
+        buttonZero = new Button("0");
         buttonPlus = new Button("+");
         buttonMinus = new Button("-");
         buttonMult = new Button("*");
@@ -69,6 +70,7 @@ public class CalculatorRPN extends Application {
         buttonOpen = new Button("(");
         buttonClose = new Button(")");
         buttonPercentage = new Button("%");
+        buttonDot = new Button(".");
         button.setMinHeight(40);
         button1.setMinHeight(40);
         button2.setMinHeight(40);
@@ -79,10 +81,12 @@ public class CalculatorRPN extends Application {
         button7.setMinHeight(40);
         button8.setMinHeight(40);
         button9.setMinHeight(40);
+        buttonZero.setMinHeight(20);
         buttonPlus.setMinHeight(30);
         buttonMinus.setMinHeight(30);
         buttonMult.setMinHeight(30);
         buttonDiv.setMinHeight(30);
+        buttonDot.setMinHeight(20);
         button1.setMinWidth(40);
         button2.setMinWidth(40);
         button3.setMinWidth(40);
@@ -91,11 +95,13 @@ public class CalculatorRPN extends Application {
         button6.setMinWidth(40);
         button7.setMinWidth(40);
         button8.setMinWidth(40);
-        button9.setMinWidth(40);;
+        button9.setMinWidth(40);
+        buttonZero.setMinWidth(110);
         buttonPlus.setMinWidth(30);
         buttonMinus.setMinWidth(30);
         buttonMult.setMinWidth(30);
         buttonDiv.setMinWidth(30);
+        buttonDot.setMinWidth(24);
         button1.setOnAction(e -> expressionField.appendText("1"));
         button2.setOnAction(e -> expressionField.appendText("2"));
         button3.setOnAction(e -> expressionField.appendText("3"));
@@ -105,12 +111,14 @@ public class CalculatorRPN extends Application {
         button7.setOnAction(e -> expressionField.appendText("7"));
         button8.setOnAction(e -> expressionField.appendText("8"));
         button9.setOnAction(e -> expressionField.appendText("9"));
+        buttonZero.setOnAction(e -> expressionField.appendText("0"));
         buttonPlus.setOnAction(e -> expressionField.appendText("+"));
         buttonMinus.setOnAction(e -> expressionField.appendText("-"));
         buttonMult.setOnAction(e -> expressionField.appendText("*"));
         buttonDiv.setOnAction(e -> expressionField.appendText("/"));
         buttonOpen.setOnAction(e -> expressionField.appendText("("));
         buttonClose.setOnAction(e -> expressionField.appendText(")"));
+        buttonDot.setOnAction(e -> expressionField.appendText("."));
         buttonPercentage.setOnAction(e -> expressionField.appendText("%"));
         button.setOnAction(e -> {
             mathExpression = expressionField.getText();
